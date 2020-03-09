@@ -52,7 +52,21 @@ server.get('/api/users', (req, res) => {
     ? res.status(200).json(users)
     : res
         .status(500)
-        .json({ errorMessage: 'The users information could not be retrieved' });
+        .json({ errorMessage: 'The user information could not be retrieved' });
+});
+
+server.get('/api/users/:id', (req, res) => {
+  var id = req.params.id;
+  const user = users.find(item => item.id === id);
+  users
+    ? user
+      ? res.status(200).json(user)
+      : res
+          .status(404)
+          .json({ message: 'The user with the specified ID does not exist.' })
+    : res
+        .status(500)
+        .json({ errorMessage: 'The user information could not be retrieved' });
 });
 
 const PORT = 5000;
