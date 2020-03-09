@@ -4,6 +4,25 @@ const shortid = require('shortid');
 const server = express();
 
 let users = [];
+const sampleData = [
+  {
+    name: 'Daniel',
+    bio: 'Web 27',
+    id: '100'
+  },
+  {
+    name: 'Aaron',
+    bio: 'Team Lead',
+    id: '101'
+  },
+  {
+    name: 'Prue',
+    bio: 'Insructor',
+    id: '102'
+  }
+];
+
+users = [...sampleData];
 
 server.use(express.json());
 
@@ -29,7 +48,11 @@ server.post('/api/users', (req, res) => {
 });
 
 server.get('/api/users', (req, res) => {
-  res.status(200).json(userInfo);
+  users
+    ? res.status(200).json(users)
+    : res
+        .status(500)
+        .json({ errorMessage: 'The users information could not be retrieved' });
 });
 
 const PORT = 5000;
