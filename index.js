@@ -85,6 +85,31 @@ server.delete('/api/users/:id', (req, res) => {
   }
 });
 
+server.put('/api/users/:id', (req, res) => {
+  const id = req.params.id;
+  const inputUser = req.body;
+  if (!inputUser.name || !inputUser.bio)
+    res
+      .status(400)
+      .json({ errorMessage: 'Please provide name and bio for the user.' });
+  else {
+    const user = users.find(item => item.id === id);
+    if (user) {
+      inputUser.id = id;
+      users = users.map(item => (item.id === id ? inputUser : item));
+      if (users.includes(inputUser)) res.status(200).json(inputUser);
+      else
+        res
+          .status(500)
+          .json({ errorMessage: 'The user information could not be modified' });
+    } else {
+      res
+        .status(404)
+        .json({ message: 'The user with the specified ID does not exist' });
+    }
+  }
+});
+
 const PORT = 5000;
 server.listen(PORT, () =>
   console.log(`\n ** API running on http://localhost:${PORT} ** \n`)
